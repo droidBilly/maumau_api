@@ -39,7 +39,8 @@ router.get("/games/:id", (req, res) => {
 
 //Create new game
 router.post("/games", (req, res) => {
-  const game = createGame()
+  const userId = req.body.userId
+  const game = createGame(userId)
   Games.create(game)
     .then(entity => {
       res.status(201)
@@ -62,7 +63,7 @@ router.get("/games/:id/active", (req, res) => {
     .then(game => {
       if (game) {
         res.status(201).send({
-         active: game.active  
+         active: game.active
         });
       } else {
         res.status(404);
@@ -73,6 +74,59 @@ router.get("/games/:id/active", (req, res) => {
       res.status(500).send({
         message: `Something went wrong`,
         err
+      });
+    });
+});
+
+// Get game by id
+router.get("/games/:gameId/:userId", (req, res) => {
+  const gameId = req.params.id;
+  const game = Games.findById(gameId)
+    .then(game => {
+      if (game) {
+        res.status(201).send({
+         active: game.active
+        });
+      } else {
+        res.status(404);
+        res.json({ message: "Game not found" });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: `Something went wrong`,
+        err
+      });
+    });
+});
+
+//Join game as Player2
+router.put("/games/:gameId/join", (req, res) => {
+  const updates =  {
+			userid_to_player2: req.body.userId
+		}
+  const gameId = req.params.gameId;
+  const game = Games.findById(gameId)
+  .then(entity => {
+    if (entity) {
+      return entity.update(updates);
+    }
+    else {
+        res.status(404);
+        res.json({ message: "User not found, can't update." });
+      }
+    })
+    .then(final => {
+      // return update
+      res.status(200);
+      res.send({
+        message: "User with the id: " + final.userid_to_player2 + " added to game: " + final.id
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send({
+        message: "Something went wrong"
       });
     });
 });
