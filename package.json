@@ -4,5 +4,11 @@
   "main": "index.js",
   "repository": "git@github.com:droidBilly/maumau_api.git",
   "author": "Peter Schrammen <b.schrammen@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "pg": "6",
+    "sequelize": "^4.37.1"
+  }
 }
