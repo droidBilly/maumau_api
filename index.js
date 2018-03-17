@@ -5,6 +5,7 @@ const cardsRouter = require('./cards/router')
 const gamesRouter = require('./game/router')
 
 app.use(bodyParser.json())
+
 app.listen(4003, () => console.log('Express API listening on port 4003'))
 
 app.use(function(req, res, next) {
