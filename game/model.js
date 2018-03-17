@@ -24,6 +24,14 @@ const Game = sequelize.define(
       type: Sequelize.JSON,
       allowNull: true
     },
+    userid_to_player1: {
+      type: Sequelize.INTEGER,
+      allowNull: true
+    },
+    userid_to_player2: {
+      type: Sequelize.INTEGER,
+      allowNull: true
+    },
   },
   {
     tableName: "game",
