@@ -17,13 +17,29 @@ router.get("/games", (req, res) => {
 });
 
 // Get game by id
-router.get("/games/:id", (req, res) => {
-  const gameId = req.params.id;
+router.get("/games/:gameId/:userId", (req, res) => {
+  const userId = Number(req.params.userId)
+  const gameId = req.params.gameId;
   const game = Games.findById(gameId)
     .then(game => {
       if (game) {
-        res.status(201);
-        res.send(game);
+        if (userId === game.userid_to_player1) {
+          res.status(201);
+          res.send({
+            active: game.active,
+            cards_on_hand: game.player1
+          })
+        } else if (userId === game.userid_to_player2 ) {
+          res.status(201);
+          res.send({
+            active: game.active,
+            cards_on_hand: game.player2
+          })
+        }
+        else {
+          res.status(404);
+          res.json({ message: "User not found" });
+        }
       } else {
         res.status(404);
         res.json({ message: "Game not found" });
@@ -58,28 +74,6 @@ router.post("/games", (req, res) => {
 
 // Get game by id
 router.get("/games/:id/active", (req, res) => {
-  const gameId = req.params.id;
-  const game = Games.findById(gameId)
-    .then(game => {
-      if (game) {
-        res.status(201).send({
-         active: game.active
-        });
-      } else {
-        res.status(404);
-        res.json({ message: "Game not found" });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: `Something went wrong`,
-        err
-      });
-    });
-});
-
-// Get game by id
-router.get("/games/:gameId/:userId", (req, res) => {
   const gameId = req.params.id;
   const game = Games.findById(gameId)
     .then(game => {
