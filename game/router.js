@@ -3,11 +3,17 @@ const Games = require("./model");
 const router = new Router();
 const { createGame } = require("../lib/game")
 
-// Send all games - only for testing
+// Send all games
 router.get("/games", (req, res) => {
   const games = Games.findAll()
-    .then(cards => {
-      res.json(games);
+    .then(games => {
+      games.sort(function (a, b) { return a.id - b.id;  })
+      res.json(games.map(game => {
+        return {
+          id: game.id,
+          player1: game.userid_to_player1
+          }
+      }))
     })
     .catch(err => {
       console.log(err);
